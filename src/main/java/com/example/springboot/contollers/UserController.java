@@ -81,28 +81,50 @@ public class UserController {
     }
 
 
-    @PostMapping("/users/{id}/addmuseums")
-    public ResponseEntity<Object> addMuseums(@PathVariable(value = "id") Long userID,
-                                             @Validated @RequestBody Set<Museum> museums) {
-        Optional<User> uu = userRepository.findById(userID);
-        int cnt = 0;
-
-        if (uu.isPresent()) {
-            User u = uu.get();
-            for(Museum m: museums) {
-                Optional<Museum> mm = museumRepository.findById(m.id);
-                if (mm.isPresent()) {
-                    u.addMuseum(mm.get());
-                    ++cnt;
-                }
+//    @PostMapping("/users/{id}/addmuseums")
+//    public ResponseEntity<Object> addMuseums(@PathVariable(value = "id") Long userID,
+//                                             @Validated @RequestBody Set<Museum> museums) {
+//        Optional<User> uu = userRepository.findById(userID);
+//        int cnt = 0;
+//
+//        if (uu.isPresent()) {
+//            User u = uu.get();
+//            for(Museum m: museums) {
+//                Optional<Museum> mm = museumRepository.findById(m.id);
+//                if (mm.isPresent()) {
+//                    u.addMuseum(mm.get());
+//                    ++cnt;
+//                }
+//            }
+//            userRepository.save(u);
+//        }
+//        Map<String, String> response = new HashMap<>();
+//        response.put("added", String.valueOf(cnt));
+//        return ResponseEntity.ok(response);
+//    }
+@PostMapping("/users/{id}/addmuseums")
+public ResponseEntity<Object> addMuseums(@PathVariable(value = "id") Long userId,
+                                         @Validated @RequestBody Set<Museum> museums) {
+    Optional<User> uu = userRepository.findById(userId);
+    int cnt = 0;
+    if (uu.isPresent()) {
+        User u = uu.get();
+        for (Museum m : museums) {
+            Optional<Museum>
+                    mm = museumRepository.findById(m.id);
+            if (mm.isPresent()) {
+                u.museums.add(mm.get());
+                System.out.println("");
+                u.salt="check";
+                cnt++;
             }
-            userRepository.save(u);
         }
-        Map<String, String> response = new HashMap<>();
-        response.put("added", String.valueOf(cnt));
-        return ResponseEntity.ok(response);
+        userRepository.save(u);
     }
-
+    Map<String, String> response = new HashMap<>();
+    response.put("count", String.valueOf(cnt));
+    return ResponseEntity.ok(response);
+}
 
 
 

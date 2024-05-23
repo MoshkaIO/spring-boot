@@ -35,7 +35,7 @@ public class User {
     @Column(name = "password")
     public String password;
 
-    @JsonIgnore
+//    @JsonIgnore
     @Column(name = "salt")
     public String salt;
 
